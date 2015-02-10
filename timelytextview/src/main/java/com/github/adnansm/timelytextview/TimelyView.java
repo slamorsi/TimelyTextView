@@ -31,7 +31,14 @@ public class TimelyView extends View {
     private              Paint                           mPaint                  = null;
     private              Path                            mPath                   = null;
     private              float[][]                       controlPoints           = null;
-    private int textColor;
+
+    public void setTextColor(int textColor) {
+        this.mTextColor = textColor;
+        if(mPaint != null)
+            mPaint.setColor(textColor);
+    }
+
+    private int mTextColor;
 
     public TimelyView(Context context) {
         this(context, null);
@@ -50,7 +57,7 @@ public class TimelyView extends View {
     }
 
     protected void initByAttributes(TypedArray attributes) {
-        textColor = attributes.getColor(R.styleable.TimelyView_timely_text_color, default_text_color);
+        mTextColor = attributes.getColor(R.styleable.TimelyView_timely_text_color, default_text_color);
     }
 
     public float[][] getControlPoints() {
@@ -123,7 +130,7 @@ public class TimelyView extends View {
         // A new paint with the style as stroke.
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(textColor);
+        mPaint.setColor(mTextColor);
         mPaint.setStrokeWidth(5.0f);
         mPaint.setStyle(Paint.Style.STROKE);
         mPath = new Path();
