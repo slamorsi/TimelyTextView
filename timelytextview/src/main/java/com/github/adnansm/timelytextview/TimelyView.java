@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.github.adnansm.timelytextview.animation.TimelyEvaluator;
 import com.github.adnansm.timelytextview.model.NumberUtils;
 import com.nineoldandroids.animation.ObjectAnimator;
@@ -36,6 +37,10 @@ public class TimelyView extends View {
         this.mTextColor = textColor;
         if(mPaint != null)
             mPaint.setColor(textColor);
+    }
+
+    public int getTextColor() {
+        return mTextColor;
     }
 
     private int mTextColor;
@@ -99,8 +104,8 @@ public class TimelyView extends View {
         mPath.moveTo(minDimen * controlPoints[0][0], minDimen * controlPoints[0][1]);
         for (int i = 1; i < length; i += 3) {
             mPath.cubicTo(minDimen * controlPoints[i][0], minDimen * controlPoints[i][1],
-                          minDimen * controlPoints[i + 1][0], minDimen * controlPoints[i + 1][1],
-                          minDimen * controlPoints[i + 2][0], minDimen * controlPoints[i + 2][1]);
+                    minDimen * controlPoints[i + 1][0], minDimen * controlPoints[i + 1][1],
+                    minDimen * controlPoints[i + 2][0], minDimen * controlPoints[i + 2][1]);
         }
         canvas.drawPath(mPath, mPaint);
     }
@@ -108,9 +113,16 @@ public class TimelyView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(widthMeasureSpec);
+        int width = MeasureSpec.getSize(widthMeasureSpec);
+        int height = MeasureSpec.getSize(heightMeasureSpec);
 
-        int width = getMeasuredWidth();
-        int height = getMeasuredHeight();
+        if(height == 0 && widthMode != MeasureSpec.UNSPECIFIED)
+            height = width;
+        else if(width == 0 && heightMode != MeasureSpec.UNSPECIFIED)
+            width = height;
+
         int widthWithoutPadding = width - getPaddingLeft() - getPaddingRight();
         int heigthWithoutPadding = height - getPaddingTop() - getPaddingBottom();
 
